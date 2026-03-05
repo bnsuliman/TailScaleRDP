@@ -28,7 +28,7 @@ jobs:
 
       - name: Create RDP User
         run: |
-          $password = "aboodABOOD*8"
+          $password = "amani@@AMANI@@"
           $securePass = ConvertTo-SecureString $password -AsPlainText -Force
 
           if (Get-LocalUser -Name "RDP" -ErrorAction SilentlyContinue) {
@@ -78,7 +78,7 @@ jobs:
 
           echo "TAILSCALE_IP=$tsIP" >> $env:GITHUB_ENV
 
-      - name: Install OBS and Discord
+      - name: Install OBS and TikTok Live Studio
         shell: powershell
         run: |
           Write-Host "Installing OBS Studio..."
@@ -87,11 +87,12 @@ jobs:
             --accept-package-agreements `
             --silent
 
-          Write-Host "Installing Discord..."
-          winget install -e --id Discord.Discord `
-            --accept-source-agreements `
-            --accept-package-agreements `
-            --silent
+          Write-Host "Downloading TikTok Live Studio..."
+          $tikTokInstaller = "$env:TEMP\TikTokLiveStudio.exe"
+          Invoke-WebRequest -Uri "https://www.tiktok.com/studio/download/TikTokLiveStudioInstaller.exe" -OutFile $tikTokInstaller
+
+          Write-Host "Installing TikTok Live Studio silently..."
+          Start-Process -FilePath $tikTokInstaller -ArgumentList "/S" -Wait
 
           Write-Host "Installation Completed!"
 
